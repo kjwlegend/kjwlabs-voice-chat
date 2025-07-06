@@ -1,0 +1,723 @@
+{
+  "project": {
+    "name": "EchoFlow - 实时对话AI助手",
+    "description": "基于火山引擎服务的高性能、低成本、可打断的对话式AI原型",
+    "version": "1.0.0",
+    "created": "2024-01-15",
+    "updated": "2024-01-15"
+  },
+  "milestones": [
+    {
+      "id": "M1",
+      "name": "里程碑1 - 核心管道搭建 (V0.1)",
+      "description": "搭建基础架构，验证火山引擎服务连通性",
+      "status": "pending",
+      "priority": "high",
+      "estimated_hours": 40
+    },
+    {
+      "id": "M2",
+      "name": "里程碑2 - 实现流式与VAD (V0.5)",
+      "description": "实现流式通信和语音活动检测",
+      "status": "pending",
+      "priority": "high",
+      "estimated_hours": 60
+    },
+    {
+      "id": "M3",
+      "name": "里程碑3 - 实现工具调用与打断 (V1.0)",
+      "description": "完成工具调用和语音打断功能",
+      "status": "pending",
+      "priority": "high",
+      "estimated_hours": 80
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T001",
+      "title": "项目初始化与环境搭建",
+      "description": "创建项目结构，设置开发环境，安装基础依赖",
+      "milestone": "M1",
+      "status": "done",
+      "priority": "high",
+      "estimated_hours": 4,
+      "tags": ["setup", "environment"],
+      "subtasks": [
+        {
+          "id": "T001.1",
+          "title": "创建前端Next.js项目",
+          "description": "使用Next.js创建前端项目，配置TypeScript和Tailwind CSS",
+          "status": "done",
+          "estimated_hours": 1
+        },
+        {
+          "id": "T001.2",
+          "title": "安装shadcn UI组件库",
+          "description": "配置shadcn UI组件库，添加必要的组件",
+          "status": "done",
+          "estimated_hours": 1
+        },
+        {
+          "id": "T001.3",
+          "title": "创建后端FastAPI项目",
+          "description": "搭建FastAPI项目结构，配置虚拟环境",
+          "status": "done",
+          "estimated_hours": 1
+        },
+        {
+          "id": "T001.4",
+          "title": "安装后端依赖包",
+          "description": "安装FastAPI, WebSocket, httpx等依赖包",
+          "status": "done",
+          "estimated_hours": 1
+        }
+      ]
+    },
+    {
+      "id": "T002",
+      "title": "火山引擎API集成",
+      "description": "集成火山引擎的STT、LLM和TTS服务",
+      "milestone": "M1",
+      "status": "pending",
+      "priority": "high",
+      "estimated_hours": 12,
+      "tags": ["volcengine", "api", "stt", "llm", "tts"],
+      "subtasks": [
+        {
+          "id": "T002.1",
+          "title": "配置火山引擎账户和密钥",
+          "description": "申请火山引擎账户，获取API密钥，配置服务权限",
+          "status": "pending",
+          "estimated_hours": 2
+        },
+        {
+          "id": "T002.2",
+          "title": "实现STT服务调用",
+          "description": "封装火山引擎语音识别API，实现音频转文本功能",
+          "status": "pending",
+          "estimated_hours": 4
+        },
+        {
+          "id": "T002.3",
+          "title": "实现LLM服务调用",
+          "description": "封装豆包大模型API，实现对话生成功能",
+          "status": "pending",
+          "estimated_hours": 3
+        },
+        {
+          "id": "T002.4",
+          "title": "实现TTS服务调用",
+          "description": "封装豆包TTS API，实现文本转语音功能",
+          "status": "pending",
+          "estimated_hours": 3
+        }
+      ]
+    },
+    {
+      "id": "T003",
+      "title": "基础前端界面开发",
+      "description": "开发简洁的对话界面，包含基本的控制按钮和状态显示",
+      "milestone": "M1",
+      "status": "pending",
+      "priority": "high",
+      "estimated_hours": 8,
+      "tags": ["frontend", "ui", "interface"],
+      "subtasks": [
+        {
+          "id": "T003.1",
+          "title": "设计主界面布局",
+          "description": "设计对话界面的基本布局和样式",
+          "status": "done",
+          "estimated_hours": 2
+        },
+        {
+          "id": "T003.2",
+          "title": "实现通话控制按钮",
+          "description": "添加开始/结束通话按钮，实现基本的状态控制",
+          "status": "done",
+          "estimated_hours": 2
+        },
+        {
+          "id": "T003.3",
+          "title": "实现状态指示器",
+          "description": "显示系统状态（准备就绪、聆听中、思考中、说话中）",
+          "status": "pending",
+          "estimated_hours": 2
+        },
+        {
+          "id": "T003.4",
+          "title": "实现文本显示区域",
+          "description": "添加识别文本和AI回复的显示区域",
+          "status": "pending",
+          "estimated_hours": 2
+        }
+      ]
+    },
+    {
+      "id": "T004",
+      "title": "基础后端API开发",
+      "description": "开发基础的API端点，实现文件上传和简单的对话功能",
+      "milestone": "M1",
+      "status": "pending",
+      "priority": "high",
+      "estimated_hours": 10,
+      "tags": ["backend", "api", "endpoints"],
+      "subtasks": [
+        {
+          "id": "T004.1",
+          "title": "实现健康检查端点",
+          "description": "添加API健康检查和服务状态端点",
+          "status": "pending",
+          "estimated_hours": 1
+        },
+        {
+          "id": "T004.2",
+          "title": "实现音频上传端点",
+          "description": "创建音频文件上传接口，支持多种音频格式",
+          "status": "pending",
+          "estimated_hours": 3
+        },
+        {
+          "id": "T004.3",
+          "title": "实现对话处理端点",
+          "description": "创建对话处理接口，调用LLM生成回复",
+          "status": "pending",
+          "estimated_hours": 4
+        },
+        {
+          "id": "T004.4",
+          "title": "实现音频合成端点",
+          "description": "创建TTS接口，返回合成的音频文件",
+          "status": "pending",
+          "estimated_hours": 2
+        }
+      ]
+    },
+    {
+      "id": "T005",
+      "title": "基础功能集成测试",
+      "description": "测试三项核心服务的连通性和基本功能",
+      "milestone": "M1",
+      "status": "pending",
+      "priority": "medium",
+      "estimated_hours": 6,
+      "tags": ["testing", "integration"],
+      "subtasks": [
+        {
+          "id": "T005.1",
+          "title": "STT服务测试",
+          "description": "测试语音识别功能的准确性和稳定性",
+          "status": "pending",
+          "estimated_hours": 2
+        },
+        {
+          "id": "T005.2",
+          "title": "LLM服务测试",
+          "description": "测试对话生成功能的质量和响应速度",
+          "status": "pending",
+          "estimated_hours": 2
+        },
+        {
+          "id": "T005.3",
+          "title": "TTS服务测试",
+          "description": "测试语音合成功能的质量和音色",
+          "status": "pending",
+          "estimated_hours": 2
+        }
+      ]
+    },
+    {
+      "id": "T006",
+      "title": "WebSocket通信架构",
+      "description": "实现前后端WebSocket实时通信",
+      "milestone": "M2",
+      "status": "pending",
+      "priority": "high",
+      "estimated_hours": 12,
+      "tags": ["websocket", "realtime", "communication"],
+      "subtasks": [
+        {
+          "id": "T006.1",
+          "title": "后端WebSocket服务",
+          "description": "实现WebSocket服务器，处理客户端连接和消息",
+          "status": "pending",
+          "estimated_hours": 4
+        },
+        {
+          "id": "T006.2",
+          "title": "前端WebSocket客户端",
+          "description": "实现前端WebSocket客户端，建立与后端的连接",
+          "status": "pending",
+          "estimated_hours": 3
+        },
+        {
+          "id": "T006.3",
+          "title": "消息协议设计",
+          "description": "定义前后端通信的消息格式和协议",
+          "status": "pending",
+          "estimated_hours": 2
+        },
+        {
+          "id": "T006.4",
+          "title": "连接管理与错误处理",
+          "description": "实现连接管理、断线重连和错误处理机制",
+          "status": "pending",
+          "estimated_hours": 3
+        }
+      ]
+    },
+    {
+      "id": "T007",
+      "title": "音频流处理实现",
+      "description": "实现音频的实时流式传输和处理",
+      "milestone": "M2",
+      "status": "pending",
+      "priority": "high",
+      "estimated_hours": 16,
+      "tags": ["audio", "streaming", "processing"],
+      "subtasks": [
+        {
+          "id": "T007.1",
+          "title": "前端音频录制",
+          "description": "使用MediaRecorder API实现音频录制",
+          "status": "pending",
+          "estimated_hours": 4
+        },
+        {
+          "id": "T007.2",
+          "title": "音频流分块传输",
+          "description": "将音频流分块传输给后端",
+          "status": "pending",
+          "estimated_hours": 3
+        },
+        {
+          "id": "T007.3",
+          "title": "后端流式STT集成",
+          "description": "集成火山引擎流式语音识别服务",
+          "status": "pending",
+          "estimated_hours": 5
+        },
+        {
+          "id": "T007.4",
+          "title": "流式TTS集成",
+          "description": "集成火山引擎流式语音合成服务",
+          "status": "pending",
+          "estimated_hours": 4
+        }
+      ]
+    },
+    {
+      "id": "T008",
+      "title": "语音活动检测(VAD)集成",
+      "description": "集成@ricky0123/vad-web实现语音活动检测",
+      "milestone": "M2",
+      "status": "pending",
+      "priority": "high",
+      "estimated_hours": 14,
+      "tags": ["vad", "detection", "audio"],
+      "subtasks": [
+        {
+          "id": "T008.1",
+          "title": "VAD库集成",
+          "description": "安装和配置@ricky0123/vad-web库",
+          "status": "pending",
+          "estimated_hours": 2
+        },
+        {
+          "id": "T008.2",
+          "title": "自动结束检测",
+          "description": "实现用户说话结束的自动检测",
+          "status": "pending",
+          "estimated_hours": 4
+        },
+        {
+          "id": "T008.3",
+          "title": "打断检测",
+          "description": "实现AI说话时用户打断的检测",
+          "status": "pending",
+          "estimated_hours": 4
+        },
+        {
+          "id": "T008.4",
+          "title": "VAD参数调优",
+          "description": "优化VAD参数以提高检测准确率",
+          "status": "pending",
+          "estimated_hours": 4
+        }
+      ]
+    },
+    {
+      "id": "T009",
+      "title": "流式对话体验优化",
+      "description": "优化流式对话的用户体验和响应速度",
+      "milestone": "M2",
+      "status": "pending",
+      "priority": "medium",
+      "estimated_hours": 12,
+      "tags": ["optimization", "ux", "performance"],
+      "subtasks": [
+        {
+          "id": "T009.1",
+          "title": "延迟优化",
+          "description": "优化系统延迟，确保思考延迟<1.5秒",
+          "status": "pending",
+          "estimated_hours": 4
+        },
+        {
+          "id": "T009.2",
+          "title": "音频播放优化",
+          "description": "优化音频播放体验，实现边生成边播放",
+          "status": "pending",
+          "estimated_hours": 4
+        },
+        {
+          "id": "T009.3",
+          "title": "状态同步优化",
+          "description": "优化前后端状态同步，提升用户体验",
+          "status": "pending",
+          "estimated_hours": 4
+        }
+      ]
+    },
+    {
+      "id": "T010",
+      "title": "流式功能集成测试",
+      "description": "测试流式功能的稳定性和性能",
+      "milestone": "M2",
+      "status": "pending",
+      "priority": "medium",
+      "estimated_hours": 6,
+      "tags": ["testing", "streaming", "integration"],
+      "subtasks": [
+        {
+          "id": "T010.1",
+          "title": "流式STT测试",
+          "description": "测试流式语音识别的准确性和延迟",
+          "status": "pending",
+          "estimated_hours": 2
+        },
+        {
+          "id": "T010.2",
+          "title": "流式TTS测试",
+          "description": "测试流式语音合成的质量和响应速度",
+          "status": "pending",
+          "estimated_hours": 2
+        },
+        {
+          "id": "T010.3",
+          "title": "VAD准确性测试",
+          "description": "测试语音活动检测的准确性和可靠性",
+          "status": "pending",
+          "estimated_hours": 2
+        }
+      ]
+    },
+    {
+      "id": "T011",
+      "title": "n8n工具调用集成",
+      "description": "集成n8n作为外部工具执行器",
+      "milestone": "M3",
+      "status": "pending",
+      "priority": "high",
+      "estimated_hours": 16,
+      "tags": ["n8n", "tools", "integration"],
+      "subtasks": [
+        {
+          "id": "T011.1",
+          "title": "n8n环境搭建",
+          "description": "安装和配置n8n服务",
+          "status": "pending",
+          "estimated_hours": 3
+        },
+        {
+          "id": "T011.2",
+          "title": "webhook接口创建",
+          "description": "在n8n中创建webhook接口",
+          "status": "pending",
+          "estimated_hours": 3
+        },
+        {
+          "id": "T011.3",
+          "title": "工具函数定义",
+          "description": "定义可调用的工具函数（天气查询、地点推荐等）",
+          "status": "pending",
+          "estimated_hours": 5
+        },
+        {
+          "id": "T011.4",
+          "title": "后端工具调用集成",
+          "description": "在后端集成n8n工具调用功能",
+          "status": "pending",
+          "estimated_hours": 5
+        }
+      ]
+    },
+    {
+      "id": "T012",
+      "title": "LLM函数调用实现",
+      "description": "实现LLM的函数调用功能",
+      "milestone": "M3",
+      "status": "pending",
+      "priority": "high",
+      "estimated_hours": 12,
+      "tags": ["llm", "function-calling", "tools"],
+      "subtasks": [
+        {
+          "id": "T012.1",
+          "title": "函数调用架构设计",
+          "description": "设计函数调用的架构和流程",
+          "status": "pending",
+          "estimated_hours": 3
+        },
+        {
+          "id": "T012.2",
+          "title": "工具描述格式化",
+          "description": "将n8n工具描述格式化为LLM可理解的格式",
+          "status": "pending",
+          "estimated_hours": 3
+        },
+        {
+          "id": "T012.3",
+          "title": "函数调用解析",
+          "description": "解析LLM返回的函数调用指令",
+          "status": "pending",
+          "estimated_hours": 3
+        },
+        {
+          "id": "T012.4",
+          "title": "结果处理与回复",
+          "description": "处理工具执行结果并生成最终回复",
+          "status": "pending",
+          "estimated_hours": 3
+        }
+      ]
+    },
+    {
+      "id": "T013",
+      "title": "语音打断(Barge-in)实现",
+      "description": "实现完整的语音打断功能",
+      "milestone": "M3",
+      "status": "pending",
+      "priority": "high",
+      "estimated_hours": 18,
+      "tags": ["barge-in", "interrupt", "audio"],
+      "subtasks": [
+        {
+          "id": "T013.1",
+          "title": "前端打断检测",
+          "description": "在前端实现打断检测逻辑",
+          "status": "pending",
+          "estimated_hours": 4
+        },
+        {
+          "id": "T013.2",
+          "title": "音频播放控制",
+          "description": "实现音频播放的即时停止控制",
+          "status": "pending",
+          "estimated_hours": 4
+        },
+        {
+          "id": "T013.3",
+          "title": "后端打断处理",
+          "description": "实现后端的打断信号处理",
+          "status": "pending",
+          "estimated_hours": 4
+        },
+        {
+          "id": "T013.4",
+          "title": "TTS任务取消",
+          "description": "实现TTS任务的即时取消机制",
+          "status": "pending",
+          "estimated_hours": 3
+        },
+        {
+          "id": "T013.5",
+          "title": "状态重置与恢复",
+          "description": "实现打断后的状态重置和对话恢复",
+          "status": "pending",
+          "estimated_hours": 3
+        }
+      ]
+    },
+    {
+      "id": "T014",
+      "title": "成本控制优化",
+      "description": "实现成本控制机制，优化API调用效率",
+      "milestone": "M3",
+      "status": "pending",
+      "priority": "medium",
+      "estimated_hours": 10,
+      "tags": ["cost", "optimization", "efficiency"],
+      "subtasks": [
+        {
+          "id": "T014.1",
+          "title": "API调用监控",
+          "description": "实现API调用次数和成本监控",
+          "status": "pending",
+          "estimated_hours": 3
+        },
+        {
+          "id": "T014.2",
+          "title": "缓存机制实现",
+          "description": "实现结果缓存，减少重复API调用",
+          "status": "pending",
+          "estimated_hours": 4
+        },
+        {
+          "id": "T014.3",
+          "title": "资源管理优化",
+          "description": "优化资源管理，防止资源泄露",
+          "status": "pending",
+          "estimated_hours": 3
+        }
+      ]
+    },
+    {
+      "id": "T015",
+      "title": "错误处理与容错",
+      "description": "实现完善的错误处理和容错机制",
+      "milestone": "M3",
+      "status": "pending",
+      "priority": "medium",
+      "estimated_hours": 12,
+      "tags": ["error-handling", "resilience", "stability"],
+      "subtasks": [
+        {
+          "id": "T015.1",
+          "title": "API调用错误处理",
+          "description": "实现API调用失败的错误处理和重试机制",
+          "status": "pending",
+          "estimated_hours": 4
+        },
+        {
+          "id": "T015.2",
+          "title": "网络异常处理",
+          "description": "实现网络中断和异常的处理机制",
+          "status": "pending",
+          "estimated_hours": 4
+        },
+        {
+          "id": "T015.3",
+          "title": "用户错误反馈",
+          "description": "实现用户友好的错误提示和反馈",
+          "status": "pending",
+          "estimated_hours": 4
+        }
+      ]
+    },
+    {
+      "id": "T016",
+      "title": "性能测试与优化",
+      "description": "进行全面的性能测试和优化",
+      "milestone": "M3",
+      "status": "pending",
+      "priority": "medium",
+      "estimated_hours": 16,
+      "tags": ["performance", "testing", "optimization"],
+      "subtasks": [
+        {
+          "id": "T016.1",
+          "title": "延迟测试",
+          "description": "测试端到端延迟，确保<1.5秒",
+          "status": "pending",
+          "estimated_hours": 4
+        },
+        {
+          "id": "T016.2",
+          "title": "并发测试",
+          "description": "测试系统的并发处理能力",
+          "status": "pending",
+          "estimated_hours": 4
+        },
+        {
+          "id": "T016.3",
+          "title": "内存和CPU优化",
+          "description": "优化系统资源使用，提升性能",
+          "status": "pending",
+          "estimated_hours": 4
+        },
+        {
+          "id": "T016.4",
+          "title": "负载测试",
+          "description": "进行系统负载测试，验证稳定性",
+          "status": "pending",
+          "estimated_hours": 4
+        }
+      ]
+    },
+    {
+      "id": "T017",
+      "title": "最终集成测试",
+      "description": "进行完整的端到端集成测试",
+      "milestone": "M3",
+      "status": "pending",
+      "priority": "high",
+      "estimated_hours": 8,
+      "tags": ["testing", "integration", "e2e"],
+      "subtasks": [
+        {
+          "id": "T017.1",
+          "title": "完整对话流程测试",
+          "description": "测试完整的对话流程，包括工具调用",
+          "status": "pending",
+          "estimated_hours": 3
+        },
+        {
+          "id": "T017.2",
+          "title": "打断功能测试",
+          "description": "测试语音打断功能的完整性",
+          "status": "pending",
+          "estimated_hours": 3
+        },
+        {
+          "id": "T017.3",
+          "title": "边界条件测试",
+          "description": "测试各种边界条件和异常情况",
+          "status": "pending",
+          "estimated_hours": 2
+        }
+      ]
+    },
+    {
+      "id": "T018",
+      "title": "文档编写与部署",
+      "description": "编写项目文档和部署指南",
+      "milestone": "M3",
+      "status": "pending",
+      "priority": "low",
+      "estimated_hours": 8,
+      "tags": ["documentation", "deployment"],
+      "subtasks": [
+        {
+          "id": "T018.1",
+          "title": "API文档编写",
+          "description": "编写详细的API文档和使用说明",
+          "status": "pending",
+          "estimated_hours": 3
+        },
+        {
+          "id": "T018.2",
+          "title": "部署指南编写",
+          "description": "编写项目部署和配置指南",
+          "status": "pending",
+          "estimated_hours": 3
+        },
+        {
+          "id": "T018.3",
+          "title": "项目演示准备",
+          "description": "准备项目演示和说明材料",
+          "status": "pending",
+          "estimated_hours": 2
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_tasks": 18,
+    "completed_tasks": 1,
+    "pending_tasks": 17,
+    "total_estimated_hours": 228,
+    "completion_percentage": 7.0,
+    "notes": "已完成项目初始化、前端状态管理、服务层、工具函数、自定义hooks的创建"
+  }
+}

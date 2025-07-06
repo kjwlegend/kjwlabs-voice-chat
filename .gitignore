@@ -1,0 +1,11 @@
+# exclude python venv
+backend/venv
+
+# exclude .env
+.env
+
+# exclude .env-test
+.env-test
+
+# exclude .env-prod
+.env-prod
