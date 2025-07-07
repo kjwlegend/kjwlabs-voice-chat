@@ -78,7 +78,7 @@
       "title": "火山引擎API集成",
       "description": "集成火山引擎的STT、LLM和TTS服务",
       "milestone": "M1",
-      "status": "pending",
+      "status": "done",
       "priority": "high",
       "estimated_hours": 12,
       "tags": ["volcengine", "api", "stt", "llm", "tts"],
@@ -87,28 +87,28 @@
           "id": "T002.1",
           "title": "配置火山引擎账户和密钥",
           "description": "申请火山引擎账户，获取API密钥，配置服务权限",
-          "status": "pending",
+          "status": "done",
           "estimated_hours": 2
         },
         {
           "id": "T002.2",
           "title": "实现STT服务调用",
           "description": "封装火山引擎语音识别API，实现音频转文本功能",
-          "status": "pending",
+          "status": "done",
           "estimated_hours": 4
         },
         {
           "id": "T002.3",
           "title": "实现LLM服务调用",
           "description": "封装豆包大模型API，实现对话生成功能",
-          "status": "pending",
+          "status": "done",
           "estimated_hours": 3
         },
         {
           "id": "T002.4",
           "title": "实现TTS服务调用",
           "description": "封装豆包TTS API，实现文本转语音功能",
-          "status": "pending",
+          "status": "done",
           "estimated_hours": 3
         }
       ]
@@ -118,7 +118,7 @@
       "title": "基础前端界面开发",
       "description": "开发简洁的对话界面，包含基本的控制按钮和状态显示",
       "milestone": "M1",
-      "status": "pending",
+      "status": "done",
       "priority": "high",
       "estimated_hours": 8,
       "tags": ["frontend", "ui", "interface"],
@@ -141,14 +141,14 @@
           "id": "T003.3",
           "title": "实现状态指示器",
           "description": "显示系统状态（准备就绪、聆听中、思考中、说话中）",
-          "status": "pending",
+          "status": "done",
           "estimated_hours": 2
         },
         {
           "id": "T003.4",
           "title": "实现文本显示区域",
           "description": "添加识别文本和AI回复的显示区域",
-          "status": "pending",
+          "status": "done",
           "estimated_hours": 2
         }
       ]
@@ -158,7 +158,7 @@
       "title": "基础后端API开发",
       "description": "开发基础的API端点，实现文件上传和简单的对话功能",
       "milestone": "M1",
-      "status": "pending",
+      "status": "done",
       "priority": "high",
       "estimated_hours": 10,
       "tags": ["backend", "api", "endpoints"],
@@ -167,28 +167,28 @@
           "id": "T004.1",
           "title": "实现健康检查端点",
           "description": "添加API健康检查和服务状态端点",
-          "status": "pending",
+          "status": "done",
           "estimated_hours": 1
         },
         {
           "id": "T004.2",
           "title": "实现音频上传端点",
           "description": "创建音频文件上传接口，支持多种音频格式",
-          "status": "pending",
+          "status": "done",
           "estimated_hours": 3
         },
         {
           "id": "T004.3",
           "title": "实现对话处理端点",
           "description": "创建对话处理接口，调用LLM生成回复",
-          "status": "pending",
+          "status": "done",
           "estimated_hours": 4
         },
         {
           "id": "T004.4",
           "title": "实现音频合成端点",
           "description": "创建TTS接口，返回合成的音频文件",
-          "status": "pending",
+          "status": "done",
           "estimated_hours": 2
         }
       ]
@@ -231,7 +231,7 @@
       "title": "WebSocket通信架构",
       "description": "实现前后端WebSocket实时通信",
       "milestone": "M2",
-      "status": "pending",
+      "status": "done",
       "priority": "high",
       "estimated_hours": 12,
       "tags": ["websocket", "realtime", "communication"],
@@ -240,28 +240,28 @@
           "id": "T006.1",
           "title": "后端WebSocket服务",
           "description": "实现WebSocket服务器，处理客户端连接和消息",
-          "status": "pending",
+          "status": "done",
           "estimated_hours": 4
         },
         {
           "id": "T006.2",
           "title": "前端WebSocket客户端",
           "description": "实现前端WebSocket客户端，建立与后端的连接",
-          "status": "pending",
+          "status": "done",
           "estimated_hours": 3
         },
         {
           "id": "T006.3",
           "title": "消息协议设计",
           "description": "定义前后端通信的消息格式和协议",
-          "status": "pending",
+          "status": "done",
           "estimated_hours": 2
         },
         {
           "id": "T006.4",
           "title": "连接管理与错误处理",
           "description": "实现连接管理、断线重连和错误处理机制",
-          "status": "pending",
+          "status": "done",
           "estimated_hours": 3
         }
       ]
@@ -271,7 +271,7 @@
       "title": "音频流处理实现",
       "description": "实现音频的实时流式传输和处理",
       "milestone": "M2",
-      "status": "pending",
+      "status": "done",
       "priority": "high",
       "estimated_hours": 16,
       "tags": ["audio", "streaming", "processing"],
@@ -280,28 +280,28 @@
           "id": "T007.1",
           "title": "前端音频录制",
           "description": "使用MediaRecorder API实现音频录制",
-          "status": "pending",
+          "status": "done",
           "estimated_hours": 4
         },
         {
           "id": "T007.2",
           "title": "音频流分块传输",
           "description": "将音频流分块传输给后端",
-          "status": "pending",
+          "status": "done",
           "estimated_hours": 3
         },
         {
           "id": "T007.3",
           "title": "后端流式STT集成",
           "description": "集成火山引擎流式语音识别服务",
-          "status": "pending",
+          "status": "done",
           "estimated_hours": 5
         },
         {
           "id": "T007.4",
           "title": "流式TTS集成",
           "description": "集成火山引擎流式语音合成服务",
-          "status": "pending",
+          "status": "done",
           "estimated_hours": 4
         }
       ]
