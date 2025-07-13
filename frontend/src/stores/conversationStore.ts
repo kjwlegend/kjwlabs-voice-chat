@@ -3,8 +3,8 @@
  * 使用Zustand管理全局对话状态
  */
 
-import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { create } from 'zustand'
+import { devtools } from 'zustand/middleware'
 import {
   ConversationState,
   ConversationTurn,
@@ -12,58 +12,69 @@ import {
   STTMessageData,
   LLMResponseData,
   ErrorMessageData,
-} from "@/types";
+  TTSMessageData,
+  WebSocketMessage,
+} from '@/types'
 
 interface ConversationStore {
   // 状态数据
-  state: ConversationState;
-  isConnected: boolean;
-  isRecording: boolean;
-  currentText: string; // 当前识别的文本
-  finalText: string; // 最终确认的文本
-  aiResponse: string; // AI回复文本
-  error: ErrorMessageData | null;
+  state: ConversationState
+  isConnected: boolean
+  isRecording: boolean
+  currentText: string // 当前识别的文本
+  finalText: string // 最终确认的文本
+  aiResponse: string // AI回复文本
+  error: ErrorMessageData | null
 
   // 对话历史
-  conversationHistory: ConversationTurn[];
+  conversationHistory: ConversationTurn[]
 
   // 性能数据
-  metrics: PerformanceMetrics | null;
+  metrics: PerformanceMetrics | null
 
   // 音频相关
-  audioChunks: Blob[];
-  isPlaying: boolean;
+  audioChunks: Blob[]
+  isPlaying: boolean
+  currentAudioUrl: string | null
 
   // Actions
-  setState: (newState: ConversationState) => void;
-  setConnected: (connected: boolean) => void;
-  setRecording: (recording: boolean) => void;
-  setCurrentText: (text: string) => void;
-  setFinalText: (text: string) => void;
-  setAiResponse: (response: string) => void;
-  setError: (error: ErrorMessageData | null) => void;
-  setPlaying: (playing: boolean) => void;
-  setMetrics: (metrics: PerformanceMetrics) => void;
+  setState: (newState: ConversationState) => void
+  setConnected: (connected: boolean) => void
+  setRecording: (recording: boolean) => void
+  setCurrentText: (text: string) => void
+  setFinalText: (text: string) => void
+  setAiResponse: (response: string) => void
+  setError: (error: ErrorMessageData | null) => void
+  setPlaying: (playing: boolean) => void
+  setMetrics: (metrics: PerformanceMetrics) => void
+  setCurrentAudioUrl: (url: string | null) => void
 
   // 对话管理
-  addConversationTurn: (turn: ConversationTurn) => void;
-  clearConversation: () => void;
+  addConversationTurn: (turn: ConversationTurn) => void
+  clearConversation: () => void
 
   // 音频管理
-  addAudioChunk: (chunk: Blob) => void;
-  clearAudioChunks: () => void;
+  addAudioChunk: (chunk: Blob) => void
+  clearAudioChunks: () => void
 
   // 重置状态
-  reset: () => void;
+  reset: () => void
 
-  // 处理STT数据
-  handleSTTData: (data: STTMessageData) => void;
+  // 消息处理器
+  handleConnectionEstablished: (message: WebSocketMessage) => void
+  handleSTTStart: (message: WebSocketMessage) => void
+  handleSTTResult: (message: WebSocketMessage) => void
+  handleLLMStart: (message: WebSocketMessage) => void
+  handleLLMResponse: (message: WebSocketMessage) => void
+  handleTTSStart: (message: WebSocketMessage) => void
+  handleTTSResult: (message: WebSocketMessage) => void
+  handleTTSUnavailable: (message: WebSocketMessage) => void
+  handleHeartbeatAck: (message: WebSocketMessage) => void
+  handleError: (message: WebSocketMessage) => void
 
-  // 处理LLM响应
-  handleLLMResponse: (data: LLMResponseData) => void;
-
-  // 触发中断
-  triggerInterrupt: () => void;
+  // 兼容性方法
+  handleSTTData: (data: STTMessageData) => void
+  triggerInterrupt: () => void
 }
 
 // 初始状态
@@ -71,15 +82,16 @@ const initialState = {
   state: ConversationState.IDLE,
   isConnected: false,
   isRecording: false,
-  currentText: "",
-  finalText: "",
-  aiResponse: "",
+  currentText: '',
+  finalText: '',
+  aiResponse: '',
   error: null,
   conversationHistory: [],
   metrics: null,
   audioChunks: [],
   isPlaying: false,
-};
+  currentAudioUrl: null,
+}
 
 export const useConversationStore = create<ConversationStore>()(
   devtools(
@@ -90,13 +102,13 @@ export const useConversationStore = create<ConversationStore>()(
       setState: (newState: ConversationState) => {
         console.log(
           `[ConversationStore] State change: ${get().state} -> ${newState}`
-        );
-        set({ state: newState });
+        )
+        set({ state: newState })
       },
 
       setConnected: (connected: boolean) => {
-        console.log(`[ConversationStore] Connection: ${connected}`);
-        set({ isConnected: connected });
+        console.log(`[ConversationStore] Connection: ${connected}`)
+        set({ isConnected: connected })
 
         // 连接断开时重置状态
         if (!connected) {
@@ -105,145 +117,250 @@ export const useConversationStore = create<ConversationStore>()(
             isRecording: false,
             isPlaying: false,
             error: null,
-          });
+          })
+        } else {
+          // 连接成功时设置为空闲状态
+          set({
+            state: ConversationState.IDLE,
+            error: null,
+          })
         }
       },
 
       setRecording: (recording: boolean) => {
-        console.log(`[ConversationStore] Recording: ${recording}`);
-        set({ isRecording: recording });
+        console.log(`[ConversationStore] Recording: ${recording}`)
+        set({ isRecording: recording })
 
         if (recording) {
           set({
             state: ConversationState.LISTENING,
-            currentText: "",
+            currentText: '',
             error: null,
-          });
+          })
         }
       },
 
       setCurrentText: (text: string) => {
-        set({ currentText: text });
+        set({ currentText: text })
       },
 
       setFinalText: (text: string) => {
-        console.log(`[ConversationStore] Final text: ${text}`);
+        console.log(`[ConversationStore] Final text: ${text}`)
         set({
           finalText: text,
           currentText: text,
-          state: ConversationState.THINKING,
-        });
+        })
       },
 
       setAiResponse: (response: string) => {
         console.log(
           `[ConversationStore] AI response: ${response.substring(0, 50)}...`
-        );
+        )
         set({
           aiResponse: response,
-          state: ConversationState.SPEAKING,
-        });
+        })
       },
 
       setError: (error: ErrorMessageData | null) => {
         if (error) {
-          console.error(`[ConversationStore] Error: ${error.message}`);
+          console.error(`[ConversationStore] Error: ${error.message}`)
           set({
             error,
             state: ConversationState.ERROR,
             isRecording: false,
             isPlaying: false,
-          });
+          })
         } else {
-          set({ error: null });
+          set({ error: null })
         }
       },
 
       setPlaying: (playing: boolean) => {
-        console.log(`[ConversationStore] Playing: ${playing}`);
-        set({ isPlaying: playing });
+        console.log(`[ConversationStore] Playing: ${playing}`)
+        set({ isPlaying: playing })
 
-        if (!playing && get().state === ConversationState.SPEAKING) {
+        if (playing) {
+          set({ state: ConversationState.SPEAKING })
+        } else if (get().state === ConversationState.SPEAKING) {
           // 播放结束，返回空闲状态
-          set({ state: ConversationState.IDLE });
+          set({ state: ConversationState.IDLE })
         }
       },
 
       setMetrics: (metrics: PerformanceMetrics) => {
-        console.log(`[ConversationStore] Metrics updated:`, metrics);
-        set({ metrics });
+        console.log(`[ConversationStore] Metrics updated:`, metrics)
+        set({ metrics })
+      },
+
+      setCurrentAudioUrl: (url: string | null) => {
+        set({ currentAudioUrl: url })
       },
 
       // 对话管理
       addConversationTurn: (turn: ConversationTurn) => {
-        console.log(`[ConversationStore] Adding conversation turn: ${turn.id}`);
+        console.log(`[ConversationStore] Adding conversation turn: ${turn.id}`)
         set((state) => ({
           conversationHistory: [...state.conversationHistory, turn],
-        }));
+        }))
       },
 
       clearConversation: () => {
-        console.log(`[ConversationStore] Clearing conversation history`);
-        set({ conversationHistory: [] });
+        console.log(`[ConversationStore] Clearing conversation history`)
+        set({ conversationHistory: [] })
       },
 
       // 音频管理
       addAudioChunk: (chunk: Blob) => {
         set((state) => ({
           audioChunks: [...state.audioChunks, chunk],
-        }));
+        }))
       },
 
       clearAudioChunks: () => {
-        set({ audioChunks: [] });
+        set({ audioChunks: [] })
       },
 
-      // 重置所有状态
+      // 重置状态
       reset: () => {
-        console.log(`[ConversationStore] Resetting all state`);
-        set(initialState);
+        console.log('[ConversationStore] Resetting state')
+        set(initialState)
       },
 
-      // STT数据处理
-      handleSTTData: (data: STTMessageData) => {
-        if (data.isFinal) {
-          get().setFinalText(data.text);
-        } else {
-          get().setCurrentText(data.text);
-        }
+      // 新的消息处理器
+      handleConnectionEstablished: (message: WebSocketMessage) => {
+        console.log('[ConversationStore] Connection established', message.data)
+        set({
+          isConnected: true,
+          state: ConversationState.IDLE,
+          error: null,
+        })
       },
 
-      // LLM响应处理
-      handleLLMResponse: (data: LLMResponseData) => {
-        get().setAiResponse(data.text);
-
-        // 如果有工具调用，可以在这里处理
-        if (data.needsToolCall && data.toolCalls) {
-          console.log(
-            `[ConversationStore] Tool calls detected:`,
-            data.toolCalls
-          );
-        }
+      handleSTTStart: (message: WebSocketMessage) => {
+        console.log('[ConversationStore] STT started', message.data)
+        set({
+          state: ConversationState.LISTENING,
+          currentText: '',
+        })
       },
 
-      // 触发中断
-      triggerInterrupt: () => {
-        console.log(`[ConversationStore] Triggering interrupt`);
-        const currentState = get().state;
+      handleSTTResult: (message: WebSocketMessage) => {
+        console.log('[ConversationStore] STT result', message.data)
+        const data = message.data
 
-        // 只在AI说话时才能中断
-        if (currentState === ConversationState.SPEAKING) {
+        if (data.type === 'final') {
           set({
-            state: ConversationState.LISTENING,
-            isPlaying: false,
-            aiResponse: "",
-          });
+            finalText: data.text,
+            currentText: data.text,
+            state: ConversationState.THINKING,
+            isRecording: false,
+          })
+        } else if (data.type === 'partial') {
+          set({
+            currentText: data.text,
+          })
         }
+      },
+
+      handleLLMStart: (message: WebSocketMessage) => {
+        console.log('[ConversationStore] LLM started', message.data)
+        set({
+          state: ConversationState.THINKING,
+        })
+      },
+
+      handleLLMResponse: (message: WebSocketMessage) => {
+        console.log('[ConversationStore] LLM response', message.data)
+        const data = message.data
+
+        set({
+          aiResponse: data.text,
+          state: ConversationState.THINKING, // 等待TTS
+        })
+      },
+
+      handleTTSStart: (message: WebSocketMessage) => {
+        console.log('[ConversationStore] TTS started', message.data)
+        set({
+          state: ConversationState.SPEAKING,
+        })
+      },
+
+      handleTTSResult: (message: WebSocketMessage) => {
+        console.log('[ConversationStore] TTS result', message.data)
+        const data = message.data
+
+        // 创建对话回合记录
+        const turn: ConversationTurn = {
+          id: Date.now().toString(),
+          userInput: get().finalText,
+          aiResponse: get().aiResponse,
+          timestamp: Date.now(),
+          duration: 0, // 可以后续计算
+        }
+
+        get().addConversationTurn(turn)
+
+        // TTS音频数据将在音频服务中处理
+      },
+
+      handleTTSUnavailable: (message: WebSocketMessage) => {
+        console.log('[ConversationStore] TTS unavailable', message.data)
+        set({
+          state: ConversationState.IDLE,
+          error: {
+            code: 'TTS_UNAVAILABLE',
+            message: message.data.message || 'TTS服务不可用',
+            retryable: false,
+          },
+        })
+      },
+
+      handleHeartbeatAck: (message: WebSocketMessage) => {
+        console.log('[ConversationStore] Heartbeat acknowledged', message.data)
+        // 可以用于监控连接状态
+      },
+
+      handleError: (message: WebSocketMessage) => {
+        console.error('[ConversationStore] Received error', message.data)
+        const errorData = message.data
+
+        set({
+          error: errorData,
+          state: ConversationState.ERROR,
+          isRecording: false,
+          isPlaying: false,
+        })
+      },
+
+      // 兼容性方法
+      handleSTTData: (data: STTMessageData) => {
+        console.log('[ConversationStore] STT data (legacy)', data)
+
+        if (data.isFinal) {
+          set({
+            finalText: data.text,
+            currentText: data.text,
+            state: ConversationState.THINKING,
+            isRecording: false,
+          })
+        } else {
+          set({
+            currentText: data.text,
+          })
+        }
+      },
+
+      triggerInterrupt: () => {
+        console.log('[ConversationStore] Interrupt triggered')
+        set({
+          state: ConversationState.IDLE,
+          isPlaying: false,
+        })
       },
     }),
     {
-      name: "conversation-store",
-      enabled: process.env.NODE_ENV === "development",
+      name: 'conversation-store',
     }
   )
-);
+)

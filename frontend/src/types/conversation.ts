@@ -13,31 +13,49 @@ export enum ConversationState {
   DISCONNECTED = 'disconnected', // 已断开连接
 }
 
-// 消息类型
+// 消息类型 - 与后端保持一致
 export enum MessageType {
-  // 音频相关
+  // 客户端->服务器
   AUDIO_CHUNK = 'audio_chunk',
-  AUDIO_START = 'audio_start',
-  AUDIO_END = 'audio_end',
+  INTERRUPT = 'interrupt',
+  START_CONVERSATION = 'start_conversation',
+  END_CONVERSATION = 'end_conversation',
+  HEARTBEAT = 'heartbeat',
 
-  // STT相关
-  STT_PARTIAL = 'stt_partial',
-  STT_FINAL = 'stt_final',
-
-  // LLM相关
-  LLM_THINKING = 'llm_thinking',
+  // 服务器->客户端
+  CONNECTION_ESTABLISHED = 'connection_established',
+  STT_START = 'stt_start',
+  STT_RESULT = 'stt_result',
+  LLM_START = 'llm_start',
   LLM_RESPONSE = 'llm_response',
 
-  // TTS相关
+  // 双路径LLM响应
+  LLM_IMMEDIATE_RESPONSE = 'llm_immediate_response',
+  LLM_FINAL_RESPONSE = 'llm_final_response',
+  LLM_PATIENCE_UPDATE = 'llm_patience_update',
+
   TTS_START = 'tts_start',
+  TTS_RESULT = 'tts_result',
+
+  // 双路径TTS响应
+  TTS_IMMEDIATE_START = 'tts_immediate_start',
+  TTS_IMMEDIATE_RESULT = 'tts_immediate_result',
+  TTS_FINAL_START = 'tts_final_start',
+  TTS_FINAL_RESULT = 'tts_final_result',
+
+  TTS_UNAVAILABLE = 'tts_unavailable',
+  HEARTBEAT_ACK = 'heartbeat_ack',
+  ERROR = 'error',
+
+  // 保留的旧类型（兼容性）
+  AUDIO_START = 'audio_start',
+  AUDIO_END = 'audio_end',
+  STT_PARTIAL = 'stt_partial',
+  STT_FINAL = 'stt_final',
+  LLM_THINKING = 'llm_thinking',
   TTS_CHUNK = 'tts_chunk',
   TTS_END = 'tts_end',
-
-  // 系统控制
-  INTERRUPT = 'interrupt',
   STATE_CHANGE = 'state_change',
-  ERROR = 'error',
-  HEARTBEAT = 'heartbeat',
 }
 
 // WebSocket消息结构

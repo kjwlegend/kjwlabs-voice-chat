@@ -1,11 +1,11 @@
-"use client";
+'use client'
 
-import { useEffect, useState } from "react";
-import Script from "next/script";
-import { Mic, Phone, PhoneOff, AlertCircle, CheckCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useConversation } from "@/hooks/useConversation";
-import { ConversationState } from "@/types";
+import { useEffect, useState } from 'react'
+import Script from 'next/script'
+import { Mic, Phone, PhoneOff, AlertCircle, CheckCircle } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { useConversation } from '@/hooks/useConversation'
+import { ConversationState } from '@/types'
 
 export default function VoiceApp() {
   const {
@@ -24,120 +24,120 @@ export default function VoiceApp() {
     interrupt,
     canStartConversation,
     canInterrupt,
-  } = useConversation();
+  } = useConversation()
 
-  const [isInitialized, setIsInitialized] = useState(false);
-  const [isElevenLabsLoaded, setIsElevenLabsLoaded] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false)
+  const [isElevenLabsLoaded, setIsElevenLabsLoaded] = useState(false)
 
   // 初始化WebSocket连接
   useEffect(() => {
     const initializeConnection = async () => {
       try {
-        console.log("[VoiceApp] Initializing WebSocket connection...");
-        await connect();
-        setIsInitialized(true);
-        console.log("[VoiceApp] WebSocket connection established");
+        console.log('[VoiceApp] Initializing WebSocket connection...')
+        await connect()
+        setIsInitialized(true)
+        console.log('[VoiceApp] WebSocket connection established')
       } catch (error) {
-        console.error("[VoiceApp] Failed to initialize connection:", error);
+        console.error('[VoiceApp] Failed to initialize connection:', error)
       }
-    };
+    }
 
     if (!isInitialized) {
-      initializeConnection();
+      initializeConnection()
     }
 
     // 清理函数
     return () => {
       if (isInitialized) {
-        disconnect();
+        disconnect()
       }
-    };
-  }, [connect, disconnect, isInitialized]);
+    }
+  }, [connect, disconnect, isInitialized])
 
   const handleCallToggle = async () => {
     if (canStartConversation) {
       try {
-        console.log("[VoiceApp] Starting conversation...");
-        await startConversation();
+        console.log('[VoiceApp] Starting conversation...')
+        await startConversation()
       } catch (error) {
-        console.error("[VoiceApp] Failed to start conversation:", error);
+        console.error('[VoiceApp] Failed to start conversation:', error)
       }
     } else if (isRecording || isPlaying) {
       try {
-        console.log("[VoiceApp] Stopping conversation...");
-        await stopConversation();
+        console.log('[VoiceApp] Stopping conversation...')
+        await stopConversation()
       } catch (error) {
-        console.error("[VoiceApp] Failed to stop conversation:", error);
+        console.error('[VoiceApp] Failed to stop conversation:', error)
       }
     }
-  };
+  }
 
   const handleInterrupt = () => {
     if (canInterrupt) {
-      console.log("[VoiceApp] Interrupting AI...");
-      interrupt();
+      console.log('[VoiceApp] Interrupting AI...')
+      interrupt()
     }
-  };
+  }
 
   const getStateText = () => {
     switch (state) {
       case ConversationState.IDLE:
-        return "准备就绪";
+        return '准备就绪'
       case ConversationState.LISTENING:
-        return "正在聆听...";
+        return '正在聆听...'
       case ConversationState.THINKING:
-        return "正在思考...";
+        return '正在思考...'
       case ConversationState.SPEAKING:
-        return "正在说话...";
+        return '正在说话...'
       case ConversationState.ERROR:
-        return "发生错误";
+        return '发生错误'
       case ConversationState.DISCONNECTED:
-        return "连接断开";
+        return '连接断开'
       default:
-        return "准备就绪";
+        return '准备就绪'
     }
-  };
+  }
 
   const getStateColor = () => {
     switch (state) {
       case ConversationState.IDLE:
-        return "text-blue-400";
+        return 'text-blue-400'
       case ConversationState.LISTENING:
-        return "text-green-400";
+        return 'text-green-400'
       case ConversationState.THINKING:
-        return "text-yellow-400";
+        return 'text-yellow-400'
       case ConversationState.SPEAKING:
-        return "text-purple-400";
+        return 'text-purple-400'
       case ConversationState.ERROR:
-        return "text-red-400";
+        return 'text-red-400'
       case ConversationState.DISCONNECTED:
-        return "text-gray-400";
+        return 'text-gray-400'
       default:
-        return "text-blue-400";
+        return 'text-blue-400'
     }
-  };
+  }
 
   const getGlowColor = () => {
     switch (state) {
       case ConversationState.IDLE:
-        return "shadow-blue-500/50";
+        return 'shadow-blue-500/50'
       case ConversationState.LISTENING:
-        return "shadow-green-500/50";
+        return 'shadow-green-500/50'
       case ConversationState.THINKING:
-        return "shadow-yellow-500/50";
+        return 'shadow-yellow-500/50'
       case ConversationState.SPEAKING:
-        return "shadow-purple-500/50";
+        return 'shadow-purple-500/50'
       case ConversationState.ERROR:
-        return "shadow-red-500/50";
+        return 'shadow-red-500/50'
       case ConversationState.DISCONNECTED:
-        return "shadow-gray-500/50";
+        return 'shadow-gray-500/50'
       default:
-        return "shadow-blue-500/50";
+        return 'shadow-blue-500/50'
     }
-  };
+  }
 
   const isCallActive =
-    isRecording || isPlaying || state === ConversationState.THINKING;
+    isRecording || isPlaying || state === ConversationState.THINKING
 
   return (
     <>
@@ -146,11 +146,11 @@ export default function VoiceApp() {
         src="https://unpkg.com/@elevenlabs/convai-widget-embed"
         strategy="lazyOnload"
         onLoad={() => {
-          console.log("[ElevenLabs] Widget script loaded successfully");
-          setIsElevenLabsLoaded(true);
+          console.log('[ElevenLabs] Widget script loaded successfully')
+          setIsElevenLabsLoaded(true)
         }}
         onError={(e) => {
-          console.error("[ElevenLabs] Failed to load widget script:", e);
+          console.error('[ElevenLabs] Failed to load widget script:', e)
         }}
       />
 
@@ -195,8 +195,8 @@ export default function VoiceApp() {
                   state === ConversationState.LISTENING ||
                   state === ConversationState.THINKING ||
                   state === ConversationState.SPEAKING
-                    ? `${getStateColor().replace("text-", "bg-")} animate-pulse`
-                    : getStateColor().replace("text-", "bg-")
+                    ? `${getStateColor().replace('text-', 'bg-')} animate-pulse`
+                    : getStateColor().replace('text-', 'bg-')
                 }`}
               ></div>
               <span className={`text-lg font-medium ${getStateColor()}`}>
@@ -213,13 +213,13 @@ export default function VoiceApp() {
                     key={i}
                     className={`w-1 bg-gradient-to-t ${
                       state === ConversationState.LISTENING
-                        ? "from-green-400 to-green-600"
-                        : "from-purple-400 to-purple-600"
+                        ? 'from-green-400 to-green-600'
+                        : 'from-purple-400 to-purple-600'
                     } rounded-full animate-pulse`}
                     style={{
                       height: `${Math.random() * 30 + 10}px`,
                       animationDelay: `${i * 0.1}s`,
-                      animationDuration: "0.8s",
+                      animationDuration: '0.8s',
                     }}
                   ></div>
                 ))}
@@ -275,8 +275,8 @@ export default function VoiceApp() {
                 size="lg"
                 className={`w-24 h-24 rounded-full text-white font-semibold text-lg transition-all duration-300 transform hover:scale-110 ${
                   isCallActive
-                    ? "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-red-500/50"
-                    : "bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-blue-500/50"
+                    ? 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-red-500/50'
+                    : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-blue-500/50'
                 } shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed`}
               >
                 {isCallActive ? (
@@ -301,10 +301,10 @@ export default function VoiceApp() {
             <div className="space-y-2">
               <p className="text-gray-300 text-sm">
                 {!isConnected
-                  ? "正在连接服务器..."
+                  ? '正在连接服务器...'
                   : isCallActive
-                  ? "点击结束通话"
-                  : "点击开始通话"}
+                  ? '点击结束通话'
+                  : '点击开始通话'}
               </p>
               {canInterrupt && (
                 <p className="text-orange-300 text-xs">点击橙色按钮可打断AI</p>
@@ -312,12 +312,12 @@ export default function VoiceApp() {
             </div>
           </div>
 
-          {/* ElevenLabs Convai Widget */}
+          {/* ElevenLabs Convai Widget
           {isElevenLabsLoaded && (
             <div className="mt-8">
               <elevenlabs-convai agent-id="agent_01jz8nd957f10asdth3sybnfdm"></elevenlabs-convai>
             </div>
-          )}
+          )} */}
 
           {/* 功能提示 */}
           <div className="max-w-md mx-auto space-y-3 text-gray-400 text-sm">
@@ -345,5 +345,5 @@ export default function VoiceApp() {
         </div>
       </div>
     </>
-  );
+  )
 }
