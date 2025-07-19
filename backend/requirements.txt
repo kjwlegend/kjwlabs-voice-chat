@@ -6,6 +6,8 @@ websockets==12.0
 # HTTP客户端
 httpx==0.25.2
 aiohttp==3.9.1
+requests==2.31.0
+urllib3==2.1.0
 
 # OpenAI SDK (for VolcEngine API compatibility)
 openai>=1.0.0

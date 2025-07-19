@@ -1,11 +1,19 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import Script from 'next/script'
-import { Mic, Phone, PhoneOff, AlertCircle, CheckCircle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { useConversation } from '@/hooks/useConversation'
-import { ConversationState } from '@/types'
+import { useEffect, useState } from "react";
+import Script from "next/script";
+import {
+  Mic,
+  Phone,
+  PhoneOff,
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  Cpu,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useConversation } from "@/hooks/useConversation";
+import { ConversationState } from "@/types";
 
 export default function VoiceApp() {
   const {
@@ -16,6 +24,11 @@ export default function VoiceApp() {
     currentText,
     finalText,
     aiResponse,
+    // 新增：双路径响应状态
+    immediateResponse,
+    finalResponse,
+    hasFinalResponse,
+    patienceMessage,
     error,
     connect,
     disconnect,
@@ -24,120 +37,136 @@ export default function VoiceApp() {
     interrupt,
     canStartConversation,
     canInterrupt,
-  } = useConversation()
+  } = useConversation();
 
-  const [isInitialized, setIsInitialized] = useState(false)
-  const [isElevenLabsLoaded, setIsElevenLabsLoaded] = useState(false)
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [isElevenLabsLoaded, setIsElevenLabsLoaded] = useState(false);
 
   // 初始化WebSocket连接
   useEffect(() => {
     const initializeConnection = async () => {
       try {
-        console.log('[VoiceApp] Initializing WebSocket connection...')
-        await connect()
-        setIsInitialized(true)
-        console.log('[VoiceApp] WebSocket connection established')
+        console.log("[VoiceApp] Initializing WebSocket connection...");
+        await connect();
+        setIsInitialized(true);
+        console.log("[VoiceApp] WebSocket connection established");
       } catch (error) {
-        console.error('[VoiceApp] Failed to initialize connection:', error)
+        console.error("[VoiceApp] Failed to initialize connection:", error);
       }
-    }
+    };
 
     if (!isInitialized) {
-      initializeConnection()
+      initializeConnection();
     }
 
     // 清理函数
     return () => {
       if (isInitialized) {
-        disconnect()
+        disconnect();
       }
-    }
-  }, [connect, disconnect, isInitialized])
+    };
+  }, [connect, disconnect, isInitialized]);
 
+  // 主要控制函数 - 完全自动化
   const handleCallToggle = async () => {
     if (canStartConversation) {
       try {
-        console.log('[VoiceApp] Starting conversation...')
-        await startConversation()
+        console.log("[VoiceApp] Starting automated conversation...");
+        await startConversation();
       } catch (error) {
-        console.error('[VoiceApp] Failed to start conversation:', error)
+        console.error("[VoiceApp] Failed to start conversation:", error);
       }
     } else if (isRecording || isPlaying) {
       try {
-        console.log('[VoiceApp] Stopping conversation...')
-        await stopConversation()
+        console.log("[VoiceApp] Stopping conversation...");
+        await stopConversation();
       } catch (error) {
-        console.error('[VoiceApp] Failed to stop conversation:', error)
+        console.error("[VoiceApp] Failed to stop conversation:", error);
       }
     }
-  }
+  };
 
+  // 中断AI说话
   const handleInterrupt = () => {
     if (canInterrupt) {
-      console.log('[VoiceApp] Interrupting AI...')
-      interrupt()
+      console.log("[VoiceApp] Interrupting AI...");
+      interrupt();
     }
-  }
+  };
 
+  // 获取状态文本和颜色
   const getStateText = () => {
     switch (state) {
       case ConversationState.IDLE:
-        return '准备就绪'
+        return "准备就绪";
       case ConversationState.LISTENING:
-        return '正在聆听...'
+        return "正在聆听...";
       case ConversationState.THINKING:
-        return '正在思考...'
+        return "正在思考...";
       case ConversationState.SPEAKING:
-        return '正在说话...'
+        return "正在说话...";
       case ConversationState.ERROR:
-        return '发生错误'
+        return "发生错误";
       case ConversationState.DISCONNECTED:
-        return '连接断开'
+        return "连接断开";
       default:
-        return '准备就绪'
+        return "准备就绪";
     }
-  }
+  };
 
   const getStateColor = () => {
     switch (state) {
       case ConversationState.IDLE:
-        return 'text-blue-400'
+        return "text-blue-400";
       case ConversationState.LISTENING:
-        return 'text-green-400'
+        return "text-green-400";
       case ConversationState.THINKING:
-        return 'text-yellow-400'
+        return "text-yellow-400";
       case ConversationState.SPEAKING:
-        return 'text-purple-400'
+        return "text-purple-400";
       case ConversationState.ERROR:
-        return 'text-red-400'
+        return "text-red-400";
       case ConversationState.DISCONNECTED:
-        return 'text-gray-400'
+        return "text-gray-400";
       default:
-        return 'text-blue-400'
+        return "text-blue-400";
     }
-  }
+  };
 
   const getGlowColor = () => {
     switch (state) {
       case ConversationState.IDLE:
-        return 'shadow-blue-500/50'
+        return "shadow-blue-500/50";
       case ConversationState.LISTENING:
-        return 'shadow-green-500/50'
+        return "shadow-green-500/50";
       case ConversationState.THINKING:
-        return 'shadow-yellow-500/50'
+        return "shadow-yellow-500/50";
       case ConversationState.SPEAKING:
-        return 'shadow-purple-500/50'
+        return "shadow-purple-500/50";
       case ConversationState.ERROR:
-        return 'shadow-red-500/50'
+        return "shadow-red-500/50";
       case ConversationState.DISCONNECTED:
-        return 'shadow-gray-500/50'
+        return "shadow-gray-500/50";
       default:
-        return 'shadow-blue-500/50'
+        return "shadow-blue-500/50";
     }
-  }
+  };
 
   const isCallActive =
-    isRecording || isPlaying || state === ConversationState.THINKING
+    isRecording || isPlaying || state === ConversationState.THINKING;
+
+  // 判断是否有双路径响应
+  const hasDualPathResponse =
+    immediateResponse || finalResponse || hasFinalResponse || patienceMessage;
+
+  // 获取要显示的AI回复内容
+  const getDisplayedAIResponse = () => {
+    if (hasDualPathResponse) {
+      // 优先显示最终响应，其次是立即响应
+      return finalResponse || immediateResponse;
+    }
+    return aiResponse;
+  };
 
   return (
     <>
@@ -146,11 +175,11 @@ export default function VoiceApp() {
         src="https://unpkg.com/@elevenlabs/convai-widget-embed"
         strategy="lazyOnload"
         onLoad={() => {
-          console.log('[ElevenLabs] Widget script loaded successfully')
-          setIsElevenLabsLoaded(true)
+          console.log("[ElevenLabs] Widget script loaded successfully");
+          setIsElevenLabsLoaded(true);
         }}
         onError={(e) => {
-          console.error('[ElevenLabs] Failed to load widget script:', e)
+          console.error("[ElevenLabs] Failed to load widget script:", e);
         }}
       />
 
@@ -168,6 +197,9 @@ export default function VoiceApp() {
               KJW Labs
             </h1>
             <div className="w-32 h-1 bg-gradient-to-r from-blue-400 to-purple-400 mx-auto rounded-full"></div>
+            <p className="text-gray-300 text-lg">
+              智能语音AI助手 - 自动化对话体验
+            </p>
           </div>
 
           {/* 连接状态指示 */}
@@ -195,8 +227,8 @@ export default function VoiceApp() {
                   state === ConversationState.LISTENING ||
                   state === ConversationState.THINKING ||
                   state === ConversationState.SPEAKING
-                    ? `${getStateColor().replace('text-', 'bg-')} animate-pulse`
-                    : getStateColor().replace('text-', 'bg-')
+                    ? `${getStateColor().replace("text-", "bg-")} animate-pulse`
+                    : getStateColor().replace("text-", "bg-")
                 }`}
               ></div>
               <span className={`text-lg font-medium ${getStateColor()}`}>
@@ -213,13 +245,13 @@ export default function VoiceApp() {
                     key={i}
                     className={`w-1 bg-gradient-to-t ${
                       state === ConversationState.LISTENING
-                        ? 'from-green-400 to-green-600'
-                        : 'from-purple-400 to-purple-600'
+                        ? "from-green-400 to-green-600"
+                        : "from-purple-400 to-purple-600"
                     } rounded-full animate-pulse`}
                     style={{
                       height: `${Math.random() * 30 + 10}px`,
                       animationDelay: `${i * 0.1}s`,
-                      animationDuration: '0.8s',
+                      animationDuration: "0.8s",
                     }}
                   ></div>
                 ))}
@@ -227,7 +259,7 @@ export default function VoiceApp() {
             )}
           </div>
 
-          {/* 文本显示区域 */}
+          {/* 文本显示区域 - 增强版支持双路径响应 */}
           <div className="space-y-4 max-w-2xl mx-auto">
             {/* 当前识别文本 */}
             {currentText && (
@@ -245,12 +277,50 @@ export default function VoiceApp() {
               </div>
             )}
 
-            {/* AI回复 */}
-            {aiResponse && (
-              <div className="bg-purple-900/20 backdrop-blur-sm rounded-lg p-4 border border-purple-500/30">
-                <p className="text-sm text-purple-400 mb-2">AI回复：</p>
-                <p className="text-white">{aiResponse}</p>
+            {/* 双路径AI响应显示 */}
+            {hasDualPathResponse ? (
+              <div className="space-y-3">
+                {/* 立即响应 */}
+                {immediateResponse && (
+                  <div className="bg-blue-900/20 backdrop-blur-sm rounded-lg p-4 border border-blue-500/30">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <Cpu className="w-4 h-4 text-blue-400" />
+                      <p className="text-sm text-blue-400">AI立即响应</p>
+                    </div>
+                    <p className="text-white">{immediateResponse}</p>
+                  </div>
+                )}
+
+                {/* 耐心等待消息 */}
+                {patienceMessage && !hasFinalResponse && (
+                  <div className="bg-orange-900/20 backdrop-blur-sm rounded-lg p-3 border border-orange-500/30">
+                    <div className="flex items-center space-x-2 mb-1">
+                      <Clock className="w-4 h-4 text-orange-400" />
+                      <p className="text-xs text-orange-400">处理中</p>
+                    </div>
+                    <p className="text-orange-200 text-sm">{patienceMessage}</p>
+                  </div>
+                )}
+
+                {/* 最终响应 */}
+                {hasFinalResponse && finalResponse && (
+                  <div className="bg-purple-900/20 backdrop-blur-sm rounded-lg p-4 border border-purple-500/30">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <CheckCircle className="w-4 h-4 text-purple-400" />
+                      <p className="text-sm text-purple-400">AI最终响应</p>
+                    </div>
+                    <p className="text-white">{finalResponse}</p>
+                  </div>
+                )}
               </div>
+            ) : (
+              /* 传统单一AI回复显示 */
+              getDisplayedAIResponse() && (
+                <div className="bg-purple-900/20 backdrop-blur-sm rounded-lg p-4 border border-purple-500/30">
+                  <p className="text-sm text-purple-400 mb-2">AI回复：</p>
+                  <p className="text-white">{getDisplayedAIResponse()}</p>
+                </div>
+              )
             )}
 
             {/* 错误显示 */}
@@ -275,8 +345,8 @@ export default function VoiceApp() {
                 size="lg"
                 className={`w-24 h-24 rounded-full text-white font-semibold text-lg transition-all duration-300 transform hover:scale-110 ${
                   isCallActive
-                    ? 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-red-500/50'
-                    : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-blue-500/50'
+                    ? "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-red-500/50"
+                    : "bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-blue-500/50"
                 } shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed`}
               >
                 {isCallActive ? (
@@ -301,10 +371,10 @@ export default function VoiceApp() {
             <div className="space-y-2">
               <p className="text-gray-300 text-sm">
                 {!isConnected
-                  ? '正在连接服务器...'
+                  ? "正在连接服务器..."
                   : isCallActive
-                  ? '点击结束通话'
-                  : '点击开始通话'}
+                  ? "点击结束通话 · 30秒无活动将自动结束"
+                  : "点击开始智能语音对话"}
               </p>
               {canInterrupt && (
                 <p className="text-orange-300 text-xs">点击橙色按钮可打断AI</p>
@@ -312,22 +382,19 @@ export default function VoiceApp() {
             </div>
           </div>
 
-          {/* ElevenLabs Convai Widget
-          {isElevenLabsLoaded && (
-            <div className="mt-8">
-              <elevenlabs-convai agent-id="agent_01jz8nd957f10asdth3sybnfdm"></elevenlabs-convai>
-            </div>
-          )} */}
-
-          {/* 功能提示 */}
+          {/* 功能提示 - 更新版 */}
           <div className="max-w-md mx-auto space-y-3 text-gray-400 text-sm">
             <div className="flex items-center justify-center space-x-2">
               <Mic className="w-4 h-4" />
               <span>支持实时语音交互</span>
             </div>
             <div className="flex items-center justify-center space-x-2">
-              <div className="w-4 h-4 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
-              <span>AI 智能助手随时待命</span>
+              <Cpu className="w-4 h-4 text-blue-400" />
+              <span>双路径AI响应 - 立即反馈 + 深度思考</span>
+            </div>
+            <div className="flex items-center justify-center space-x-2">
+              <Clock className="w-4 h-4 text-orange-400" />
+              <span>智能超时检测 - 30秒无活动自动结束</span>
             </div>
             {isConnected && (
               <div className="flex items-center justify-center space-x-2">
@@ -338,12 +405,12 @@ export default function VoiceApp() {
             {isElevenLabsLoaded && (
               <div className="flex items-center justify-center space-x-2">
                 <CheckCircle className="w-4 h-4 text-blue-400" />
-                <span className="text-blue-400">对话 组件已加载</span>
+                <span className="text-blue-400">语音组件已加载</span>
               </div>
             )}
           </div>
         </div>
       </div>
     </>
-  )
+  );
 }
